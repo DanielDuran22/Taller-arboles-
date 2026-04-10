@@ -1,0 +1,88 @@
+class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.izq = None
+        self.der = None
+
+class Arbol:
+    def __init__(self):
+        self.raiz = None
+
+    def buscar(self, nodo, dato):
+        if nodo is None:
+            return None
+        if nodo.dato == dato:
+            return nodo
+        res = self.buscar(nodo.izq, dato)
+        if res:
+            return res
+        return self.buscar(nodo.der, dato)
+
+    def insertar_hijo(self, padre, dato):
+        if padre.izq is None:
+            padre.izq = Nodo(dato)
+        elif padre.der is None:
+            padre.der = Nodo(dato)
+        else:
+            print("Ese nodo ya tiene dos hijos")
+            return
+        print("Hijo agregado")
+
+    def peso(self, nodo):
+        if nodo is None:
+            return 0
+        return 1 + self.peso(nodo.izq) + self.peso(nodo.der)
+
+    def orden(self, nodo):
+        if nodo is None:
+            return 0
+        if nodo.izq is None and nodo.der is None:
+            return 1
+        return self.orden(nodo.izq) + self.orden(nodo.der)
+
+    def altura(self, nodo):
+        if nodo is None:
+            return 0
+        return 1 + max(self.altura(nodo.izq), self.altura(nodo.der))
+
+a = Arbol()
+
+while True:
+    print("\n--- MENU ---")
+    print("1. Ingresar raiz")
+    print("2. Agregar hijo")
+    print("3. Peso, orden y altura")
+    print("4. Salir")
+
+    op = input("Opcion: ")
+
+    if op == "1":
+        if a.raiz != None:
+            print("Ya hay una raiz")
+        else:
+            n = int(input("Dato de la raiz: "))
+            a.raiz = Nodo(n)
+            print("Raiz creada")
+
+    elif op == "2":
+        if a.raiz is None:
+            print("Primero ingrese la raiz")
+        else:
+            p = int(input("Dato del padre: "))
+            padre = a.buscar(a.raiz, p)
+            if padre is None:
+                print("No se encontro ese nodo")
+            else:
+                h = int(input("Dato del hijo: "))
+                a.insertar_hijo(padre, h)
+
+    elif op == "3":
+        if a.raiz is None:
+            print("El arbol esta vacio")
+        else:
+            print("Peso:", a.peso(a.raiz))
+            print("Orden:", a.orden(a.raiz))
+            print("Altura:", a.altura(a.raiz))
+
+    elif op == "4":
+        break
